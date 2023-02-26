@@ -2,8 +2,9 @@ import { Icon } from '@chakra-ui/icons';
 import { Flex, HStack, IconButton, Text } from '@chakra-ui/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { FiCheck, FiX } from 'react-icons/fi';
+import { FiCheck, FiX, FiTrash } from 'react-icons/fi';
 import {
+  removeTodoMutation,
   toggleTodoCompletionMutation,
   updateTodoTitleMutation,
 } from '../services/api/mutations';
@@ -23,6 +24,7 @@ export const TodoItem = ({ id, title, isCompleted }: TodoItemProps) => {
   const [editedTitle, setEditedTitle] = useState(title);
 
   const queryClient = useQueryClient();
+  const removeTodo = useMutation(removeTodoMutation(queryClient)(id));
   const updateTodoTitle = useMutation(updateTodoTitleMutation(queryClient)(id));
   const toggleTodoCompletion = useMutation(
     toggleTodoCompletionMutation(queryClient)(id)
@@ -94,16 +96,25 @@ export const TodoItem = ({ id, title, isCompleted }: TodoItemProps) => {
             </HStack>
           </Flex>
         ) : (
-          <Text
-            flex="1"
-            onClick={handleSwitchToEditMode}
-            fontSize="lg"
-            noOfLines={1}
-            textOverflow="ellipsis"
-            textDecoration={isCompleted ? 'line-through' : undefined}
-          >
-            {title}
-          </Text>
+          <Flex flex="1" align="center">
+            <Text
+              flex="1"
+              onClick={handleSwitchToEditMode}
+              fontSize="lg"
+              noOfLines={1}
+              textOverflow="ellipsis"
+              textDecoration={isCompleted ? 'line-through' : undefined}
+            >
+              {title}
+            </Text>
+
+            <IconButton
+              isDisabled={removeTodo.isLoading}
+              aria-label={`delete ${title} to-do`}
+              icon={<Icon as={FiTrash} />}
+              onClick={() => removeTodo.mutate()}
+            />
+          </Flex>
         )}
       </Flex>
     </HStack>
