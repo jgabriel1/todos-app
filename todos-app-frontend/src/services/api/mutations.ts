@@ -1,0 +1,37 @@
+import { QueryClient } from '@tanstack/react-query';
+import { client } from './client';
+import { type CreateTodoData } from './types';
+
+export const createTodoMutation = (queryClient: QueryClient) => ({
+  mutationFn: async ({ title }: CreateTodoData) => {
+    const { data } = await client.post('todos', { title });
+    return data;
+  },
+  onSuccess: () => {
+    queryClient.invalidateQueries(['todos']);
+  },
+});
+
+export const toggleTodoCompletionMutation =
+  (queryClient: QueryClient) => (todoId: number) => ({
+    mutationKey: ['toggleTodoCompletion', todoId],
+    mutationFn: async (isCompleted: boolean) => {
+      const { data } = await client.put(`todos/${todoId}`, { isCompleted });
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['todos']);
+    },
+  });
+
+export const updateTodoTitleMutation =
+  (queryClient: QueryClient) => (todoId: number) => ({
+    mutationKey: ['updateTodoTitle', todoId],
+    mutationFn: async (title: string) => {
+      const { data } = await client.put(`todos/${todoId}`, { title });
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['todos']);
+    },
+  });
