@@ -20,7 +20,7 @@ export class TodosService {
   }
 
   update(id: number, updateTodoDto: UpdateTodoDto) {
-    if (!updateTodoDto.title) {
+    if (updateTodoDto.title === '') {
       throw new BadRequestException('To-do title cannot be empty');
     }
 
