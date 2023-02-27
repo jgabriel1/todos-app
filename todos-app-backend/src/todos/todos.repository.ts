@@ -12,10 +12,10 @@ export class TodosRepository {
   ) {}
 
   findAll() {
-    return this.todosModel.find().sort({ createdAt: 'asc' });
+    return this.todosModel.find().sort({ createdAt: 'asc' }).exec();
   }
 
-  async createTodo({ title }: CreateTodoDto) {
+  createTodo({ title }: CreateTodoDto) {
     const createdTodo = new this.todosModel({
       title,
       isCompleted: false,
