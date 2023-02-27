@@ -7,7 +7,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 type RenderElement = Parameters<typeof originalRender>[0];
 
-const testQueryClient = new QueryClient();
+const testQueryClient = new QueryClient({
+  logger: {
+    log: () => null,
+    error: () => null,
+    warn: () => null,
+  },
+});
 
 const wrapper: RenderOptions['wrapper'] = ({ children }) => (
   <ChakraProvider>

@@ -1,5 +1,6 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import user from '@testing-library/user-event';
+import { AxiosError } from 'axios';
 import { TodoItem } from '../../components/TodoItem';
 import { render } from '../__utils__/render';
 
@@ -102,5 +103,35 @@ describe('<TodoItem />', () => {
     await user.click(removeToDoButton);
 
     expect(mockRemoveTodo).toHaveBeenCalledTimes(1);
+  });
+
+  it('should display error message on screen when trying to update title to empty value', async () => {
+    const errorMessage = 'Test error messsage.';
+
+    mockUpdateTodoTitle.mockImplementationOnce(() => {
+      const error = new Error('Error');
+      Object.assign(error, {
+        response: { data: { message: errorMessage } },
+      });
+      return Promise.reject(error);
+    });
+
+    render(<TodoItem {...testToDoData} />);
+
+    const toDoTitle = screen.getByText(testToDoData.title);
+
+    await user.click(toDoTitle);
+
+    const editToDoTitleInput = screen.getByTestId('edit-todo-title-input');
+    const submitEditToDoButton = screen.getByTestId(
+      'submit-edit-todo-title-button'
+    );
+
+    await user.clear(editToDoTitleInput);
+    await user.click(submitEditToDoButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(errorMessage));
+    });
   });
 });

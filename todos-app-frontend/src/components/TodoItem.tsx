@@ -1,5 +1,5 @@
 import { Icon } from '@chakra-ui/icons';
-import { Flex, HStack, IconButton, Text } from '@chakra-ui/react';
+import { Flex, HStack, IconButton, Text, useToast } from '@chakra-ui/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { FiCheck, FiX, FiTrash } from 'react-icons/fi';
@@ -8,6 +8,7 @@ import {
   toggleTodoCompletionMutation,
   updateTodoTitleMutation,
 } from '../services/api/mutations';
+import { getAxiosErrorMessage } from '../utils/getAxiosErrorMessage';
 import { Checkbox } from './Checkbox';
 import { Input } from './Input';
 
@@ -30,6 +31,8 @@ export const TodoItem = ({ id, title, isCompleted }: TodoItemProps) => {
     toggleTodoCompletionMutation(queryClient)(id)
   );
 
+  const toast = useToast();
+
   const handleToggle = (isChecked: boolean) => {
     toggleTodoCompletion.mutate(isChecked);
   };
@@ -41,6 +44,13 @@ export const TodoItem = ({ id, title, isCompleted }: TodoItemProps) => {
       updateTodoTitle.mutate(editedTitle, {
         onSuccess() {
           setIsEditMode(false);
+        },
+        onError(error) {
+          toast({
+            status: 'error',
+            title: 'Error updating title.',
+            description: getAxiosErrorMessage(error),
+          });
         },
       });
     }
