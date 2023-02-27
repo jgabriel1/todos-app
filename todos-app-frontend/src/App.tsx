@@ -13,7 +13,6 @@ export const App = () => {
   const todos = useQuery(getTodosQuery());
 
   const queryClient = useQueryClient();
-
   const createTodo = useMutation(createTodoMutation(queryClient));
 
   const inputRef = useRef<HTMLInputElement>(null);
