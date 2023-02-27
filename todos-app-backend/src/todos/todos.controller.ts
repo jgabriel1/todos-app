@@ -27,11 +27,11 @@ export class TodosController {
 
   @Put(':id')
   update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
-    return this.todosService.update(+id, updateTodoDto);
+    return this.todosService.update(id, updateTodoDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.todosService.remove(+id);
+    return this.todosService.remove(id);
   }
 }

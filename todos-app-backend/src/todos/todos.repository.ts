@@ -1,50 +1,40 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import type { Model } from 'mongoose';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
-import { Todo } from './entities/todo.entity';
+import { Todo, TodoDocument } from './entities/todo.entity';
 
 @Injectable()
 export class TodosRepository {
-  private todos: Todo[] = [];
+  constructor(
+    @InjectModel(Todo.name) private readonly todosModel: Model<TodoDocument>,
+  ) {}
 
-  async findAll() {
-    return this.todos;
+  findAll() {
+    return this.todosModel.find().sort({ createdAt: 'asc' });
   }
 
-  async createTodo(createTodoDto: CreateTodoDto) {
-    const todo = new Todo();
+  async createTodo({ title }: CreateTodoDto) {
+    const createdTodo = new this.todosModel({
+      title,
+      isCompleted: false,
+    });
 
-    todo.id = Date.now();
-    todo.title = createTodoDto.title;
-    todo.isCompleted = false;
+    return createdTodo.save();
+  }
 
-    this.todos.push(todo);
+  async updateTodo(id: string, { title, isCompleted }: UpdateTodoDto) {
+    const todo = await this.todosModel.findByIdAndUpdate(
+      id,
+      { title, isCompleted },
+      { new: true },
+    );
 
     return todo;
   }
 
-  async updateTodo(id: number, { title, isCompleted }: UpdateTodoDto) {
-    const todoExists = this.todos.find((todo) => todo.id === id);
-
-    if (todoExists) {
-      Object.assign(
-        todoExists,
-        title !== undefined && { title },
-        isCompleted !== undefined && { isCompleted },
-      );
-    }
-  }
-
-  async removeTodo(id: number) {
-    this.todos = this.todos.filter((todo) => todo.id !== id);
+  removeTodo(id: string) {
+    return this.todosModel.deleteOne({ _id: id }).exec();
   }
 }
-
-// @Injectable()
-// export class TodosRepository {
-//   createTodo(createTodoDto: CreateTodoDto) {}
-
-//   updateTodo(id: number, updateTodoDto: UpdateTodoDto) {}
-
-//   removeTodo(id: number) {}
-// }

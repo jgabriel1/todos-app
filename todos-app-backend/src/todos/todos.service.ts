@@ -19,7 +19,7 @@ export class TodosService {
     return this.todosRepository.findAll();
   }
 
-  update(id: number, updateTodoDto: UpdateTodoDto) {
+  update(id: string, updateTodoDto: UpdateTodoDto) {
     if (updateTodoDto.title === '') {
       throw new BadRequestException('To-do title cannot be empty');
     }
@@ -27,7 +27,7 @@ export class TodosService {
     return this.todosRepository.updateTodo(id, updateTodoDto);
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return this.todosRepository.removeTodo(id);
   }
 }
