@@ -15,14 +15,28 @@ export const Checkbox = ({ isChecked, isLoading, onChange }: CheckboxProps) => (
     display="flex"
     alignItems="center"
     justifyContent="center"
+    isDisabled={isLoading}
     onClick={() => onChange(!isChecked)}
+    data-testid="checkbox-button"
   >
     {isLoading ? (
-      <Spinner h={6} w={6} />
+      <Spinner h={6} w={6} data-testid="checkbox-loading-spinner" />
     ) : isChecked ? (
-      <Icon as={FiCheckCircle} h={6} w={6} color="green.400" />
+      <Icon
+        as={FiCheckCircle}
+        h={6}
+        w={6}
+        color="green.400"
+        data-testid="checkbox-checked"
+      />
     ) : (
-      <Icon as={FiCircle} h={6} w={6} color="red.400" />
+      <Icon
+        as={FiCircle}
+        h={6}
+        w={6}
+        color="red.400"
+        data-testid="checkbox-unchecked"
+      />
     )}
   </Button>
 );

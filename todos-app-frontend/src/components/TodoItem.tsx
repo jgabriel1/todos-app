@@ -69,6 +69,7 @@ export const TodoItem = ({ id, title, isCompleted }: TodoItemProps) => {
             ref={inputRef}
             value={editedTitle}
             onChange={(e) => setEditedTitle(e.target.value)}
+            data-testid="edit-todo-title-input"
           />
 
           <HStack>
@@ -77,12 +78,14 @@ export const TodoItem = ({ id, title, isCompleted }: TodoItemProps) => {
               type="submit"
               aria-label={`submit edit ${title} to-do`}
               icon={<Icon as={FiCheck} />}
+              data-testid="submit-edit-todo-title-button"
             />
             <IconButton
               isDisabled={updateTodoTitle.isLoading}
               aria-label={`cancel edit ${title} to-do`}
               icon={<Icon as={FiX} />}
               onClick={() => setIsEditMode(false)}
+              data-testid="cancel-edit-todo-title-button"
             />
           </HStack>
         </Flex>
@@ -105,6 +108,7 @@ export const TodoItem = ({ id, title, isCompleted }: TodoItemProps) => {
             aria-label={`delete ${title} to-do`}
             icon={<Icon as={FiTrash} />}
             onClick={() => removeTodo.mutate()}
+            data-testid="remove-todo-button"
           />
         </Flex>
       )}
