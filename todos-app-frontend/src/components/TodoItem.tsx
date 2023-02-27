@@ -34,14 +34,6 @@ export const TodoItem = ({ id, title, isCompleted }: TodoItemProps) => {
     toggleTodoCompletion.mutate(isChecked);
   };
 
-  const handleSwitchToEditMode = () => {
-    setIsEditMode(true);
-
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
-
   const handleEditTitle = (event: FormEvent) => {
     event.preventDefault();
 
@@ -68,55 +60,54 @@ export const TodoItem = ({ id, title, isCompleted }: TodoItemProps) => {
         onChange={handleToggle}
       />
 
-      <Flex flex="1">
-        {isEditMode ? (
-          <Flex flex="1" as="form" onSubmit={handleEditTitle}>
-            <Input
-              isDisabled={updateTodoTitle.isLoading}
-              flex="1"
-              type="text"
-              ref={inputRef}
-              value={editedTitle}
-              onChange={(e) => setEditedTitle(e.target.value)}
-            />
+      {isEditMode ? (
+        <Flex flex="1" as="form" onSubmit={handleEditTitle}>
+          <Input
+            isDisabled={updateTodoTitle.isLoading}
+            flex="1"
+            type="text"
+            ref={inputRef}
+            value={editedTitle}
+            onChange={(e) => setEditedTitle(e.target.value)}
+          />
 
-            <HStack>
-              <IconButton
-                isDisabled={updateTodoTitle.isLoading}
-                type="submit"
-                aria-label={`submit edit ${title} to-do`}
-                icon={<Icon as={FiCheck} />}
-              />
-              <IconButton
-                isDisabled={updateTodoTitle.isLoading}
-                aria-label={`cancel edit ${title} to-do`}
-                icon={<Icon as={FiX} />}
-                onClick={() => setIsEditMode(false)}
-              />
-            </HStack>
-          </Flex>
-        ) : (
-          <Flex flex="1" align="center">
-            <Text
-              flex="1"
-              onClick={handleSwitchToEditMode}
-              fontSize="lg"
-              noOfLines={1}
-              textOverflow="ellipsis"
-              textDecoration={isCompleted ? 'line-through' : undefined}
-            >
-              {title}
-            </Text>
-
+          <HStack>
             <IconButton
-              isDisabled={removeTodo.isLoading}
-              aria-label={`delete ${title} to-do`}
-              icon={<Icon as={FiTrash} />}
-              onClick={() => removeTodo.mutate()}
+              isDisabled={updateTodoTitle.isLoading}
+              type="submit"
+              aria-label={`submit edit ${title} to-do`}
+              icon={<Icon as={FiCheck} />}
             />
-          </Flex>
-        )}
-      </Flex>
+            <IconButton
+              isDisabled={updateTodoTitle.isLoading}
+              aria-label={`cancel edit ${title} to-do`}
+              icon={<Icon as={FiX} />}
+              onClick={() => setIsEditMode(false)}
+            />
+          </HStack>
+        </Flex>
+      ) : (
+        <Flex flex="1" align="center">
+          <Text
+            flex="1"
+            cursor="pointer"
+            onClick={() => setIsEditMode(true)}
+            fontSize="lg"
+            noOfLines={1}
+            textOverflow="ellipsis"
+            textDecoration={isCompleted ? 'line-through' : undefined}
+          >
+            {title}
+          </Text>
+
+          <IconButton
+            isDisabled={removeTodo.isLoading}
+            aria-label={`delete ${title} to-do`}
+            icon={<Icon as={FiTrash} />}
+            onClick={() => removeTodo.mutate()}
+          />
+        </Flex>
+      )}
     </HStack>
   );
 };

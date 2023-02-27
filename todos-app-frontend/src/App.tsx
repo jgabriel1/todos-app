@@ -1,24 +1,13 @@
 import { Icon } from '@chakra-ui/icons';
-import { Box, Container, HStack, IconButton, VStack } from '@chakra-ui/react';
+import { Container, HStack, IconButton, VStack } from '@chakra-ui/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ReactNode, useRef, type FormEvent } from 'react';
+import { useRef, type FormEvent } from 'react';
 import { FiPlus } from 'react-icons/fi';
 import { Input } from './components/Input';
+import { ItemWrapper } from './components/ItemWrapper';
 import { TodoItem } from './components/TodoItem';
 import { createTodoMutation } from './services/api/mutations';
 import { getTodosQuery } from './services/api/queries';
-
-const Wrapper = ({ children }: { children: ReactNode }) => (
-  <Box
-    px={6}
-    py={4}
-    w="full"
-    borderBottomColor="blackAlpha.200"
-    borderBottomWidth="thin"
-  >
-    {children}
-  </Box>
-);
 
 export const App = () => {
   const todos = useQuery(getTodosQuery());
@@ -51,12 +40,17 @@ export const App = () => {
   return (
     <Container maxW="container.md" py={8}>
       <VStack spacing="0" w="full" shadow="md" bg="whiteAlpha.600">
-        <Wrapper>
-          <HStack as="form" onSubmit={handleSubmitCreateTodo}>
+        <ItemWrapper>
+          <HStack
+            as="form"
+            onSubmit={handleSubmitCreateTodo}
+            data-testid="add-todo-form"
+          >
             <Input
               ref={inputRef}
               type="text"
               placeholder="What should be done?"
+              data-testid="add-todo-input"
             />
 
             <IconButton
@@ -64,18 +58,19 @@ export const App = () => {
               type="submit"
               aria-label="add to-do"
               icon={<Icon as={FiPlus} />}
+              data-testid="add-todo-button"
             />
           </HStack>
-        </Wrapper>
+        </ItemWrapper>
 
         {todos.data?.map((todo) => (
-          <Wrapper>
+          <ItemWrapper key={`to-dos-list-item-${todo.id}`}>
             <TodoItem
               id={todo.id}
               title={todo.title}
               isCompleted={todo.isCompleted}
             />
-          </Wrapper>
+          </ItemWrapper>
         ))}
       </VStack>
     </Container>
