@@ -75,9 +75,8 @@ describe('TodosService', () => {
   });
 
   it('updates a to-do with provided values', async () => {
-    const spyUpdateTodo = jest.spyOn(todosRepository, 'updateTodo');
-
     const updatedTodoId = 'test-id';
+    const spyUpdateTodo = jest.spyOn(todosRepository, 'updateTodo');
 
     await todosService.update(updatedTodoId, updateTestTodoDto);
 
@@ -99,9 +98,9 @@ describe('TodosService', () => {
   });
 
   it('removes a to-do', async () => {
+    const removedTodoId = 'test-id';
     const spyRemoveTodo = jest.spyOn(todosRepository, 'removeTodo');
 
-    const removedTodoId = 'test-id';
     await todosService.remove(removedTodoId);
 
     expect(spyRemoveTodo).toHaveBeenCalledWith(removedTodoId);
