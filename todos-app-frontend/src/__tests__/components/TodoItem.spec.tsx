@@ -7,6 +7,12 @@ const mockToggleTodo = jest.fn();
 const mockUpdateTodoTitle = jest.fn();
 const mockRemoveTodo = jest.fn();
 
+jest.mock('../../services/api/queries', () => ({
+  getTodosQuery: () => ({
+    queryKey: ['todos'],
+  }),
+}));
+
 jest.mock('../../services/api/mutations', () => ({
   toggleTodoCompletionMutation: () => (todoId: string) => ({
     mutationKey: ['toggleTodoCompletion', todoId],

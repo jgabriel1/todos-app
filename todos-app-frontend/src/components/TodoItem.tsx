@@ -1,6 +1,10 @@
 import { Icon } from '@chakra-ui/icons';
 import { Flex, HStack, IconButton, Text, useToast } from '@chakra-ui/react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  useIsFetching,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { FiCheck, FiX, FiTrash } from 'react-icons/fi';
 import {
@@ -8,6 +12,7 @@ import {
   toggleTodoCompletionMutation,
   updateTodoTitleMutation,
 } from '../services/api/mutations';
+import { getTodosQuery } from '../services/api/queries';
 import { getAxiosErrorMessage } from '../utils/getAxiosErrorMessage';
 import { Checkbox } from './Checkbox';
 import { Input } from './Input';
@@ -30,6 +35,8 @@ export const TodoItem = ({ id, title, isCompleted }: TodoItemProps) => {
   const toggleTodoCompletion = useMutation(
     toggleTodoCompletionMutation(queryClient)(id)
   );
+
+  const isRevalidatingTodos = useIsFetching(getTodosQuery());
 
   const toast = useToast();
 
@@ -65,7 +72,7 @@ export const TodoItem = ({ id, title, isCompleted }: TodoItemProps) => {
   return (
     <HStack spacing={8}>
       <Checkbox
-        isLoading={toggleTodoCompletion.isLoading}
+        isLoading={toggleTodoCompletion.isLoading || !!isRevalidatingTodos}
         isChecked={isCompleted}
         onChange={handleToggle}
       />
