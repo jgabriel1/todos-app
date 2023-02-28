@@ -14,7 +14,7 @@ export const createTodoMutation = (queryClient: QueryClient) => ({
 });
 
 export const toggleTodoCompletionMutation =
-  (queryClient: QueryClient) => (todoId: number) => ({
+  (queryClient: QueryClient) => (todoId: string) => ({
     mutationKey: ['toggleTodoCompletion', todoId],
     mutationFn: async (isCompleted: boolean) => {
       const { data } = await client.put(`todos/${todoId}`, { isCompleted });
@@ -26,7 +26,7 @@ export const toggleTodoCompletionMutation =
   });
 
 export const updateTodoTitleMutation =
-  (queryClient: QueryClient) => (todoId: number) => ({
+  (queryClient: QueryClient) => (todoId: string) => ({
     mutationKey: ['updateTodoTitle', todoId],
     mutationFn: async (title: string) => {
       const { data } = await client.put(`todos/${todoId}`, { title });
@@ -38,7 +38,7 @@ export const updateTodoTitleMutation =
   });
 
 export const removeTodoMutation =
-  (queryClient: QueryClient) => (todoId: number) => ({
+  (queryClient: QueryClient) => (todoId: string) => ({
     mutationKey: ['removeTodo', todoId],
     mutationFn: async () => {
       const { data } = await client.delete(`todos/${todoId}`);

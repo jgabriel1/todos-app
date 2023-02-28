@@ -1,5 +1,5 @@
 export type Todo = {
-  id: number;
+  id: string;
   title: string;
   isCompleted: boolean;
 };
@@ -11,7 +11,6 @@ export type CreateTodoData = {
 };
 
 export type UpdateTodoData = {
-  id: number;
   title?: string;
   isCompleted?: boolean;
 };

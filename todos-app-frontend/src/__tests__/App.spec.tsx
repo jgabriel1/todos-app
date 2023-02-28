@@ -24,15 +24,15 @@ jest.mock('../services/api/mutations', () => ({
     mutationKey: ['createTodo'],
     mutationFn: mockCreateTodo,
   }),
-  toggleTodoCompletionMutation: () => (todoId: number) => ({
+  toggleTodoCompletionMutation: () => (todoId: string) => ({
     mutationKey: ['toggleTodoCompletion', todoId],
     mutationFn: jest.fn(),
   }),
-  updateTodoTitleMutation: () => (todoId: number) => ({
+  updateTodoTitleMutation: () => (todoId: string) => ({
     mutationKey: ['updateTodoTitle', todoId],
     mutationFn: jest.fn(),
   }),
-  removeTodoMutation: () => (todoId: number) => ({
+  removeTodoMutation: () => (todoId: string) => ({
     mutationKey: ['removeTodo', todoId],
     mutationFn: jest.fn(),
   }),

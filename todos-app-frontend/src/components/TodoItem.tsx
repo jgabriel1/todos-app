@@ -13,7 +13,7 @@ import { Checkbox } from './Checkbox';
 import { Input } from './Input';
 
 export type TodoItemProps = {
-  id: number;
+  id: string;
   title: string;
   isCompleted: boolean;
 };

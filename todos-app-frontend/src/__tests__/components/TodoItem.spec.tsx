@@ -1,6 +1,5 @@
 import { screen, waitFor } from '@testing-library/react';
 import user from '@testing-library/user-event';
-import { AxiosError } from 'axios';
 import { TodoItem } from '../../components/TodoItem';
 import { render } from '../__utils__/render';
 
@@ -9,15 +8,15 @@ const mockUpdateTodoTitle = jest.fn();
 const mockRemoveTodo = jest.fn();
 
 jest.mock('../../services/api/mutations', () => ({
-  toggleTodoCompletionMutation: () => (todoId: number) => ({
+  toggleTodoCompletionMutation: () => (todoId: string) => ({
     mutationKey: ['toggleTodoCompletion', todoId],
     mutationFn: mockToggleTodo,
   }),
-  updateTodoTitleMutation: () => (todoId: number) => ({
+  updateTodoTitleMutation: () => (todoId: string) => ({
     mutationKey: ['updateTodoTitle', todoId],
     mutationFn: mockUpdateTodoTitle,
   }),
-  removeTodoMutation: () => (todoId: number) => ({
+  removeTodoMutation: () => (todoId: string) => ({
     mutationKey: ['removeTodo', todoId],
     mutationFn: mockRemoveTodo,
   }),
@@ -25,7 +24,7 @@ jest.mock('../../services/api/mutations', () => ({
 
 describe('<TodoItem />', () => {
   const testToDoData = {
-    id: 1,
+    id: '1',
     title: 'Test To-Do',
     isCompleted: false,
   };
